@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+</head>
+
+<body>
+   
+    <div id="signUpContainer">
+        <h2>Sign Up</h2>
+        <input type="text" id="username" placeholder="username"><br>
+        <input type="password" id="password" placeholder="password"><br>
+        <input type="text" id="profilePicture" placeholder="profile piture url"><br>
+        <input type="email" id="email" placeholder="email (optinal)"><br>
+        <input type="number" id="age" placeholder="age"><br>
+        <button id="signup">Sign Up</button><br>
+        <a href="./signin.html">Already have an account? Sign In</a>
+    </div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+        import { getDatabase, get, child, set, ref } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbcRKJkGVbvpUwF4YM2wmHx3D1ithr4q4",
+            authDomain: "oweinstagram.firebaseapp.com",
+            projectId: "oweinstagram",
+            storageBucket: "oweinstagram.appspot.com",
+            messagingSenderId: "702577071468",
+            appId: "1:702577071468:web:7ab8f9f1a1b8e803cecf49"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dbRef = ref(db);
+        // doms vars
+        const username = document.getElementById('username');
+        const password = document.getElementById('password');
+        const profilePicture = document.getElementById('profilePicture');
+        const email = document.getElementById('email');
+        const age = document.getElementById('age');
+        const signup = document.getElementById('signup');
+        signup.onclick = function () {
+            const user = {
+                username: username.value,
+                password: password.value,
+                profilePicture: profilePicture.value,
+                email: email.value,
+                age: age.value
+            }
+            window.localStorage.setItem("profilePicture", profilePicture.value);
+             set(child(dbRef, 'users/' + username.value), user);
+            setTimeout(() => {
+                window.location.href = './index.html';
+            }, 1000);
+        }
+
+    </script>
+    <style>
+        body {
+            background-color: #0e0e0e;
+            color: #fff;
+        }
+
+        @font-face {
+            font-family: mainfont;
+            src: url(./uni-sans.heavy-caps.otf);
+        }
+
+        @font-face {
+            font-family: monofont;
+            src: url(./JetBrainsMono-Regular.ttf);
+        }
+        #signUpContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 50vh;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: mainfont;
+        }
+        a, input, button {
+            font-family: monofont;
+        }
+        input {
+            border: none;
+            border-bottom: 1px solid #fff;
+            background-color: #1a1919;
+            color: #fff;
+            padding: 5px;
+            margin: 5px;
+        }
+        button {
+            border: 1px solid #fff;
+            background-color: #1a1919;
+            color: #fff;
+            padding: 5px;
+            margin: 5px;
+        }
+        a {
+            color: #fff;
+            text-decoration: none;
+            transition: .5s;
+        }
+        a:hover {
+            color: #ff0000;
+        }
+    </style>
+</body>
+
+</html>

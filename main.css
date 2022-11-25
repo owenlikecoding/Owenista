@@ -1,0 +1,50 @@
+body {
+    background-color: #0e0e0e;
+    color: #fff;
+}
+
+@font-face {
+    font-family: mainfont;
+    src: url(./uni-sans.heavy-caps.otf);
+}
+
+@font-face {
+    font-family: monofont;
+    src: url(./JetBrainsMono-Regular.ttf);
+}
+#signUpContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: mainfont;
+}
+a, input, button, p {
+    font-family: monofont;
+}
+input {
+    border: none;
+    border-bottom: 1px solid #fff;
+    background-color: #1a1919;
+    color: #fff;
+    padding: 5px;
+    margin: 5px;
+}
+button {
+    border: 1px solid #fff;
+    background-color: #1a1919;
+    color: #fff;
+    padding: 5px;
+    margin: 5px;
+}
+a {
+    color: #fff;
+    text-decoration: none;
+    transition: .5s;
+}
+a:hover {
+    color: #ff0000;
+}

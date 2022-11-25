@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./main.css">
+    <title>Comments</title>
+</head>
+
+<body>
+    <h1>Comments</h1>
+    <a href="./index.html">Back To posts</a>
+    <p id="comments">Loading...</p>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+        import { getDatabase, get, child, set, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbcRKJkGVbvpUwF4YM2wmHx3D1ithr4q4",
+            authDomain: "oweinstagram.firebaseapp.com",
+            projectId: "oweinstagram",
+            storageBucket: "oweinstagram.appspot.com",
+            messagingSenderId: "702577071468",
+            appId: "1:702577071468:web:7ab8f9f1a1b8e803cecf49"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dbref = ref(db);
+        const comments = document.getElementById('comments');
+        // get the post id from the url
+        var postId = window.localStorage.getItem("cp");
+        get(child(dbref, "posts/" + postId)).then(function(snapshot) {
+          comments.innerHTML = snapshot.val().comments;
+        });
+    </script>
+</body>
+
+</html>

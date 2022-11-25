@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./main.css">
+  <title>Oweinstagram</title>
+</head>
+
+<body>
+  <div id="top">
+    <h1>Oweinstagram</h1>
+    <div id="hmm">
+      <p>Looks like you dont have an account</p>
+      <a href="./signin.html"><button>Sign In</button></a>
+      <a href="./signup.html"><button> Sign Up</button></a>
+    </div>
+  </div>
+  <a href="#" id="cr">Create a post</a>
+  
+  <div id="create">
+
+  </div>
+  <h1>Posts:</h1>
+  <ul id="posts">
+
+  </ul>
+  <style>
+
+  </style>
+  <!--jquery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+    import { getDatabase, get, child, set, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDbcRKJkGVbvpUwF4YM2wmHx3D1ithr4q4",
+      authDomain: "oweinstagram.firebaseapp.com",
+      projectId: "oweinstagram",
+      storageBucket: "oweinstagram.appspot.com",
+      messagingSenderId: "702577071468",
+      appId: "1:702577071468:web:7ab8f9f1a1b8e803cecf49"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const dbRef = ref(db);
+    const postsRef = child(dbRef, 'posts');
+    const posts = document.getElementById('posts');
+    onValue(postsRef, (snapshot) => {
+      posts.innerHTML = "";
+      const data = snapshot.val();
+      console.log(data);
+      for (const key in data) {
+        const post = data[key];
+        const li = document.createElement('li');
+        li.innerHTML = `
+        <div class="pro">
+          <img src="${post.profile}" alt="" width="50px;" height="50px" style="border-radius: 50%;">
+          <p>${post.user} Says..</p>
+        </div>
+          <h2>${post.title}</h2>
+          <p>${post.content}</p>
+          <button PID="${post.id}" class="LIKE">Like (${post.likes})</button>
+          <button PID="${post.id}" class="DISLIKE">Dislike (${post.dislikes})</button>
+          <button PID="${post.id}" class="COMMENT">Comment</button><br>
+          <a href="./comment.html" onclick="window.localStorage.setItem('cp', ${post.id})">Veiw comments</comment>
+          
+
+        `;
+        posts.appendChild(li);
+      }
+      $(".LIKE").click(function () {
+      var pid = $(this).attr("PID");
+      get(child(dbRef, "posts/" + pid)).then((snapshot) => {
+        var likes = snapshot.val().likes;
+        update(ref(db, "posts/" + pid), {
+          likes: likes/1 + 1
+        });
+        
+      }).catch((error) => {
+        console.error(error);
+      });
+    });
+    $(".DISLIKE").click(function () {
+      var pid = $(this).attr("PID");
+      get(child(dbRef, "posts/" + pid)).then((snapshot) => {
+        var likes = snapshot.val().dislikes;
+        update(ref(db, "posts/" + pid), {
+          dislikes: likes/1 + 1
+        });
+        
+      }).catch((error) => {
+        console.error(error);
+      });
+    });
+    $(".COMMENT").click(function () {
+      var pid = $(this).attr("PID");
+      var comment = prompt("Enter your comment");
+      get(child(dbRef, "posts/" + pid)).then((snapshot) => {
+        var comments = snapshot.val().comments;
+        if(comments == undefined){
+          update(ref(db, "posts/" + pid), {
+          comments: window.localStorage.getItem("username") + ' says ' + ": " + comment
+        });
+        }
+        update(ref(db, "posts/" + pid), {
+          comments: comments + window.localStorage.getItem("username") + ' says ' + ": " + comment + "<br>"
+        });
+        
+      }).catch((error) => {
+        console.error(error);
+      });
+    });
+    });
+
+    if (window.localStorage.getItem("username") != null) {
+      document.getElementById("hmm").style.display = "none";
+      document.getElementById("posts").style.display = "block";
+    }
+    var cr = document.getElementById("cr");
+    cr.addEventListener("click", function () {
+      var create = document.getElementById("create");
+      create.innerHTML = `
+      <form id="form">
+      <input type="text" id="title" placeholder="Title">
+      <input type="text" id="content" placeholder="Content">
+      <button type="submit">Create</button>
+      </form>
+      `;
+      var form = document.getElementById("form");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var title = document.getElementById("title").value;
+        var content = document.getElementById("content").value;
+        get(child(dbRef, "users/number")).then((snapshot) => {
+          var num = snapshot.val().num;
+          set(ref(db, "posts/" + num), {
+            title: title,
+            content: content,
+            user: window.localStorage.getItem("username"),
+            likes: 0,
+            dislikes: 0,
+            id: num,
+            profile: window.localStorage.getItem("profilePicture")
+          });
+          // set new num
+          set(ref(db, "users/number"), {
+            num: num - 1
+          });
+          
+
+
+        }).catch((error) => {
+          console.error(error);
+        });
+
+      });
+    });
+   
+      
+    
+
+  
+
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="./main.css">
+</head>
+
+<body>
+    <div id="SignUpContainer">
+        <h1>Sign In</h1>
+        <input type="text" id="username" placeholder="username"><br>
+        <input type="password" id="password" placeholder="password"><br>
+        <button id="sub">Sign In</button>
+    </div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+        import { getDatabase, get, child, set, ref } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbcRKJkGVbvpUwF4YM2wmHx3D1ithr4q4",
+            authDomain: "oweinstagram.firebaseapp.com",
+            projectId: "oweinstagram",
+            storageBucket: "oweinstagram.appspot.com",
+            messagingSenderId: "702577071468",
+            appId: "1:702577071468:web:7ab8f9f1a1b8e803cecf49"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dbref = ref(db);
+        // doms vars
+        const username = document.getElementById('username');
+        const password = document.getElementById('password');
+        const sub = document.getElementById('sub');
+        sub.onclick = function() {
+            get(child(dbref, 'users/' + username.value)).then((snapshot) => {
+                if(!snapshot.exists()) {
+                    alert("user does not exist");
+                } 
+                else if(password.value !== snapshot.val().password) {
+                    alert("wrong password");
+                }
+                else {
+                    alert("success");
+                    window.localStorage.setItem("username", username.value);
+                    window.location.href = "./index.html";
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+    </script>
+</body>
+
+</html>
