@@ -57,6 +57,7 @@
                 email: email.value,
                 age: age.value
             }
+            window.localStorage.setItem("username", username.value);
             window.localStorage.setItem("profilePicture", profilePicture.value);
              set(child(dbRef, 'users/' + username.value), user);
             setTimeout(() => {
