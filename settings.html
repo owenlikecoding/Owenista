@@ -54,10 +54,11 @@
                 console.log(error);
             }, function() {
                 getDownloadURL(uploadTask.snapshot.ref).then(function(downloadURL) {
-                    console.log('File available at', downloadURL);
+                    alert('File uploaded,  available at '+ downloadURL);
                     update(child(dbRef, 'users/' + window.localStorage.getItem('username')), {
-                        profile_picture: downloadURL
+                        profilePicture: downloadURL
                     });
+                    window.localStorage.setItem('profilePicture', downloadURL);
                 });
             });
         });
